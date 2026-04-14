@@ -1,0 +1,16 @@
+<div id="undecided-list" class="space-y-4">
+  {% if added is defined %}
+  <p class="text-sm text-green-600 font-medium">Added {{ added }} new job(s).</p>
+  {% endif %}
+
+  {% if not undecided %}
+    <div class="text-center py-16 text-gray-400">
+      <p class="text-lg">No new jobs found.</p>
+      <p class="text-sm mt-1">Upload your resume in Settings and hit Refresh to get started.</p>
+    </div>
+  {% else %}
+    {% for job in undecided %}
+      {% include "jobs/_job_card.html" %}
+    {% endfor %}
+  {% endif %}
+</div>

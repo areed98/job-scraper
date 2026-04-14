@@ -1,0 +1,15 @@
+.env
+data/
+static/resume/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.db
+migrations/

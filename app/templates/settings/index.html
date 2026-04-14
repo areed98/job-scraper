@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Settings — JobScraper{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Settings</h1>
+
+<div class="grid gap-6 max-w-xl">
+  <!-- Resume card -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+    <h2 class="text-base font-semibold mb-3">Resume</h2>
+    {% if profile %}
+    <p class="text-sm text-gray-700 mb-1">
+      <span class="font-medium">Active file:</span> {{ profile.filename }}
+    </p>
+    <p class="text-xs text-gray-400 mb-4">
+      Uploaded {{ profile.uploaded_at.strftime('%b %d, %Y %H:%M') }}
+    </p>
+    {% else %}
+    <p class="text-sm text-yellow-600 mb-4">No resume uploaded yet.</p>
+    {% endif %}
+    <a href="/resume/upload"
+       class="inline-block text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition">
+      {% if profile %}Replace Resume{% else %}Upload Resume{% endif %}
+    </a>
+  </div>
+
+  <!-- Scrape settings notice -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+    <h2 class="text-base font-semibold mb-2">Scrape Settings</h2>
+    <p class="text-sm text-gray-500">
+      Configure <code class="bg-gray-100 px-1 rounded">MAX_JOBS_PER_REFRESH</code>,
+      <code class="bg-gray-100 px-1 rounded">MATCH_SCORE_THRESHOLD</code>, and
+      <code class="bg-gray-100 px-1 rounded">ANTHROPIC_API_KEY</code> via the
+      <code class="bg-gray-100 px-1 rounded">.env</code> file or environment variables.
+    </p>
+  </div>
+</div>
+{% endblock %}
