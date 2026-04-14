@@ -9,6 +9,8 @@ jobs_bp = Blueprint("jobs", __name__)
 
 @jobs_bp.route("/")
 def index():
+    from ..models import ResumeProfile
+    profile = ResumeProfile.query.filter_by(is_active=True).order_by(ResumeProfile.id.desc()).first()
     undecided = (
         Job.query
         .outerjoin(Decision)
@@ -22,7 +24,7 @@ def index():
         .order_by(Decision.decided_at.desc())
         .all()
     )
-    return render_template("jobs/index.html", undecided=undecided, decided=decided)
+    return render_template("jobs/index.html", undecided=undecided, decided=decided, profile=profile)
 
 
 @jobs_bp.route("/jobs/refresh", methods=["POST"])
