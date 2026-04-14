@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Job Scraper{% endblock %}</title>
+  <!-- Tailwind CSS via CDN (swap for local build when scaling) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <style>
+    /* difflib table styling */
+    table.diff { width: 100%; border-collapse: collapse; font-size: 0.75rem; font-family: monospace; }
+    table.diff td, table.diff th { padding: 2px 6px; border: 1px solid #e5e7eb; }
+    .diff_header { background: #f3f4f6; color: #6b7280; }
+    td.diff_next { background: #f9fafb; }
+    td.diff_add { background: #dcfce7; }
+    td.diff_chg { background: #fef9c3; }
+    td.diff_sub { background: #fee2e2; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+    <a href="/" class="text-lg font-semibold text-indigo-600">JobScraper</a>
+    <div class="flex gap-4 text-sm">
+      <a href="/" class="hover:text-indigo-600">Jobs</a>
+      <a href="/settings/" class="hover:text-indigo-600">Settings</a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Modal overlay (used by HTMX modals) -->
+  <div id="modal-backdrop"
+       class="hidden fixed inset-0 bg-black/50 z-40 flex items-start justify-center pt-16"
+       onclick="closeModal()">
+    <div id="modal-content"
+         class="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto p-6"
+         onclick="event.stopPropagation()">
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById('modal-backdrop').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('modal-backdrop').classList.add('hidden');
+    }
+    // HTMX event: when modal content is loaded, show backdrop
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+      if (evt.detail.target.id === 'modal-content') {
+        openModal();
+      }
+    });
+  </script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

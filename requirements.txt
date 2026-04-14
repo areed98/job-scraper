@@ -1,0 +1,10 @@
+flask>=3.0,<4
+flask-sqlalchemy>=3.1,<4
+flask-migrate>=4.0,<5
+anthropic>=0.25,<1
+python-jobspy>=1.1,<2
+pdfminer.six>=20221105
+reportlab>=4.0,<5
+gunicorn>=22,<23
+python-dotenv>=1.0,<2
+Werkzeug>=3.0,<4
