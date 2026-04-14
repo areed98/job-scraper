@@ -19,5 +19,6 @@ ENV DATA_DIR=/data
 ENV RESUME_DIR=/data/resume
 ENV FLASK_APP=run.py
 
-# Run migrations then start gunicorn
-CMD flask db upgrade && gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 120 run:app
+RUN chmod +x start.sh
+
+CMD ["bash", "start.sh"]
