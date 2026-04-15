@@ -1,10 +1,23 @@
 from flask import Blueprint, render_template, request, jsonify, current_app
+import math
 from ..extensions import db
 from ..models import Job, Decision
 from ..services.scraper import run_scrape
 from ..services.claude_client import score_job
 
 jobs_bp = Blueprint("jobs", __name__)
+
+
+def _str(val, default=""):
+    """Convert a value to str, treating NaN/None as the default."""
+    if val is None:
+        return default
+    try:
+        if math.isnan(float(val)):
+            return default
+    except (TypeError, ValueError):
+        pass
+    return str(val).strip() or default
 
 
 @jobs_bp.route("/")
@@ -44,26 +57,26 @@ def refresh():
     added = 0
 
     for raw in raw_jobs:
-        url = raw.get("job_url") or raw.get("url", "")
+        url = _str(raw.get("job_url") or raw.get("url", ""))
         if not url:
             continue
         if Job.query.filter_by(url=url).first():
             continue
 
-        description = raw.get("description", "")
-        score, analysis = score_job(resume_text, raw.get("title", ""), description)
+        description = _str(raw.get("description"))
+        score, analysis = score_job(resume_text, _str(raw.get("title")), description)
 
         if score < threshold:
             # Still save it so we don't re-fetch, but mark low score
             pass
 
         job = Job(
-            title=raw.get("title", "Untitled"),
-            company=raw.get("company", "Unknown"),
-            location=raw.get("location", ""),
+            title=_str(raw.get("title"), "Untitled"),
+            company=_str(raw.get("company"), "Unknown"),
+            location=_str(raw.get("location")),
             url=url,
             description=description,
-            source=raw.get("site", ""),
+            source=_str(raw.get("site")),
             match_score=score,
             match_analysis=analysis,
         )
